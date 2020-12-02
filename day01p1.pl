@@ -16,7 +16,6 @@ for my $n (keys %n) {
 }
 
 for my $n (keys %n) {
-   for my $s (keys %s) {
-      print $n*$s{$s} if $n + $s == 2020;
-   }
+   my $x = 2020-$n;
+   print $n*$s{$x} if $s{$x};
 }
