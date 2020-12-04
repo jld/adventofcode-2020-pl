@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# -*- mode: cperl; cperl-indent-level: 3; indent-tabs-mode: nil -*-
 use strict;
 $\="\n";
 
