@@ -37,16 +37,22 @@ while (<>) {
 
 ###
 
+sub eval_pred {
+   my ($pred, $n) = @_;
+   for my $range (@$pred) {
+      return 1 if $range->[0] <= $n && $n <= $range->[1];
+   }
+   return 0;
+}
+
 my $sum = 0;
 for my $tk (@theirs) {
    for my $n (@$tk) {
       my $valid;
-    FIELD: for my $field (@fields) {
-         for my $pred (@{$field->{pred}}) {
-            if ($pred->[0] <= $n && $n <= $pred->[1]) {
-               $valid = 1;
-               last FIELD;
-            }
+      for my $field (@fields) {
+         if (eval_pred($field->{pred}, $n)) {
+            $valid = 1;
+            last;
          }
       }
       $sum += $n unless $valid;
