@@ -95,6 +95,39 @@ sub trim {
    Tile->new("[${sid}]", map { substr $_,1,-1 } @$rows[1..$#$rows-1])
 }
 
+my @monster =
+  ([0, 1], [1, 2], [4, 2], [5, 1],
+   [6, 1], [7, 2], [10, 2], [11, 1],
+   [12, 1], [13, 2], [16, 2], [17, 1],
+   [18, 0], [18, 1], [19, 1]);
+
+sub monsters {
+   my $self = shift;
+   my ($w, $h) = ($self->width(), $self->height());
+   my $count = 0;
+   for my $y (0..$h-3) {
+    LOC:
+      for my $x (0...$w-20) {
+         for my $dot (@monster) {
+            next LOC unless $self->get($x + $dot->[0], $y + $dot->[1]) eq "#";
+         }
+         ++$count;
+      }
+   }
+   return $count;
+}
+
+sub count {
+   my $self = shift;
+   my $n = 0;
+   for my $row (@{$self->{rows}}) {
+      for my $ch (split //, $row) {
+         ++$n if $ch eq "#";
+      }
+   }
+   return $n;
+}
+
 package main;
 
 my (%tiles, %index);
@@ -188,3 +221,11 @@ for my $y (0..$#layout) {
    $image = $y ? $image->join_y($band) : $band;
 }
 $image->printout();
+
+print;
+for my $view ($image->flips()) {
+   my $m = $view->monsters();
+   next unless $m;
+   print $m;
+   print $view->count() - 15 * $m;
+}
